@@ -68,7 +68,9 @@ window.addEventListener('load', getLocalStorage);
 
 
 
+
 let rand = Math.ceil(Math.random() * 20);
+
 function getRandom() {
   
  // console.log(rand); 
@@ -77,10 +79,8 @@ getRandom();
 
 function setBg(){
   
-   rand = rand.toString().padStart(2, "0");
-    
-  //  console.log(rand);
-    document.body.style.backgroundImage = `url("https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${greet}/${rand}.jpg")`;
+   rand = rand.toString().padStart(2, "0");    
+   document.body.style.backgroundImage = `url("https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${greet}/${rand}.jpg")`;
 
   }
   setBg();
@@ -97,8 +97,9 @@ function getSlideNext(){
   } else {
     rand = 1;
     setBg(rand);
-  }        
-  //  console.log(rand);
+  }         
+  
+ // console.log(rand);
 }
 next.addEventListener('click', getSlideNext);
 
@@ -296,3 +297,113 @@ console.log('Score: 75 / 150
    Аудиоплеер +5)')
 
    */
+
+  
+audio.addEventListener("ended", playNext),
+document.querySelector(".play-next").addEventListener("click", playNext),
+document.querySelector(".play-prev").addEventListener("click", playPrev),
+document.querySelector(".play").addEventListener("click", playAudio);
+
+function playNext() {
+    playNum >= playList.length - 1 ? (playNum = 0,
+    audio.pause(),
+    isPlay = !1) : (playNum++,
+    audio.pause(),
+    isPlay = !1),
+    localStorage.setItem("soundProgress-value", "NaN"),
+    localStorage.setItem("playNum", playNum),
+    playAudio()
+}
+function playPrev() {
+    playNum <= 0 ? (playNum = playList.length - 1,
+    isPlay = !1,
+    audio.pause()) : (playNum--,
+    isPlay = !1,
+    audio.pause()),
+    localStorage.setItem("soundProgress-value", "NaN"),
+    localStorage.setItem("playNum", playNum),
+    playAudio()
+}
+
+/*
+
+
+let urlApiFlickr, urlApiUnsplash;
+//checkLanguage(),
+engBtn.addEventListener("click", changeLanguageEng),
+rusBtn.addEventListener("click", changeLanguageRus);
+let apiFlickrBtn = document.querySelector(".flickr-api")
+  , apiUnsplashBtn = document.querySelector(".unsplash-api")
+  , githubBtn = document.querySelector(".github-api");
+async function getUnsplashToImage() {
+    const e = `https://api.unsplash.com/photos/random?orientation=landscape&query=${getTimeOfDayForBg()},nature&client_id=4zlg7vxd_ulCb_aTpZiwXv16GCqGfAOXokIEwa_JBhM`
+      , t = await fetch(e)
+      , o = await t.json();
+    urlApiUnsplash = o.urls.regular
+}
+getUnsplashToImage();
+const albomsFlickr = {
+    night: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720062587146&extras=url_h&format=json&nojsoncallback=1",
+    morning: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720069530982&extras=url_h&format=json&nojsoncallback=1",
+    afternoon: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720111881805&extras=url_h&format=json&nojsoncallback=1",
+    evening: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720111880160&extras=url_h&format=json&nojsoncallback=1"
+}
+async function getFlickrToImage() {
+    const e = albomsFlickr[getTimeOfDayForBg()]
+      , t = await fetch(e)
+      , o = await t.json();
+    urlApiFlickr = o.photos.photo[randomNumForApi].url_h ? o.photos.photo[randomNumForApi].url_h : `https://farm${o.photos.photo[randomNumForApi].farm}.staticflickr.com/${o.photos.photo[randomNumForApi].server}/${o.photos.photo[randomNumForApi].id}_${o.photos.photo[randomNumForApi].secret}.jpg`
+}
+function setBgApi() {
+    const e = document.querySelector("body"),
+     t = new Image;
+    isApiFlickr ? (getFlickrToImage(),
+    t.src = urlApiFlickr) : isApiUnsplash ? (getUnsplashToImage(),
+    t.src = urlApiUnsplash) : setBg(),
+    t.onload = ()=>{
+        e.style.backgroundImage = `url('${t.src}')`,
+        setTimeout(()=>{
+            loading = !0
+        }
+        , 1100)
+    }
+}
+getFlickrToImage(),
+apiFlickrBtn.addEventListener("click", (function() {
+    githubBtn.classList.remove("active"),
+    apiUnsplashBtn.classList.remove("active"),
+    apiFlickrBtn.classList.add("active"),
+    isApiFlickr = !0,
+    isApiUnsplash = !1,
+    setBgApi()
+}
+//)),
+apiUnsplashBtn.addEventListener("click", (function() {
+    githubBtn.classList.remove("active"),
+    apiUnsplashBtn.classList.add("active"),
+    apiFlickrBtn.classList.remove("active"),
+    isApiFlickr = !1,
+    isApiUnsplash = !0,
+    setBgApi()
+}
+//)),
+githubBtn.addEventListener("click", (function() {
+    (isApiFlickr || isApiUnsplash) && (console.log(1),
+    githubBtn.classList.add("active"),
+    apiUnsplashBtn.classList.remove("active"),
+    apiFlickrBtn.classList.remove("active"),
+    isApiFlickr = !1,
+    isApiUnsplash = !1,
+    setBg())
+}
+//));
+const settingsBtn = document.querySelector(".settings-icon")
+  , settingsWrap = document.querySelector(".settings-wrap");
+function showSettings() {
+    settingsBtn.classList.toggle("active"),
+    settingsWrap.classList.toggle("active")
+}
+settingsBtn.addEventListener("click", showSettings);
+
+
+*/
