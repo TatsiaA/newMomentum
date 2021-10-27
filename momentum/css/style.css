@@ -92,13 +92,17 @@ body {
 }
 
 .player-icon:active,
-.slider-icon:active,
-.change-quote:active {
+.slider-icon:active {
   border: 0;
   outline: 0;  
   transform: scale(1.1);
 }
-
+.change-quote:active {
+  border: 0;
+  outline: 0;  
+  transform: rotate(180deg);
+  transition: .2s ease-in;
+}
 .play {
   width: 40px;
   height: 40px;
