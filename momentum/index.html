@@ -19,8 +19,17 @@
       </div>
       <ul class="play-list"></ul>
     </div>
+    <div class="settings"> 
+        <div class="set-icon"></div>     
+        <div class="lng-select">
+            <select class="change-lang">
+                <option value="en" selected>En</option>
+                <option value="ru">Ru</option>
+            </select>
+        </div>    
+    </div>
     <div class="weather">
-      <input type="text" class="city" placeholder = "Enter city" value="Minsk" />
+      <input type="text" class="city" placeholder = "Enter city" value="" />
       <i class="weather-icon owf"></i>
       <div class="weather-error"></div>
       <div class="description-container">
@@ -41,7 +50,9 @@
     <div class="greeting-container">
       <span class="greeting"></span>
       <input type="text" class="name" placeholder="&lbrack;Enter your name&rbrack;"/>
+      
     </div>
+    
   </main>
   <footer class="footer">
     <div class="settings-icon"></div>
@@ -52,5 +63,6 @@
     </div>
   </footer>
   <script type="module" src="js/script.js"></script>
+  <script src="js/lang.js"></script>
 </body>
 </html>

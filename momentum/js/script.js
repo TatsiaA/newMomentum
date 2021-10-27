@@ -1,3 +1,5 @@
+const selectLang = document.querySelector('.change-lang');
+
 /* Часы и календарь */
 
  function showTime(){
@@ -6,8 +8,12 @@
          const date = new Date();
          const currentTime = date.toLocaleTimeString();
          const options = {weekday: 'long', month: 'long', day: 'numeric'};
-         const currentDate = date.toLocaleDateString('en-Br', options);
-         
+         let currentDate = date.toLocaleDateString('en-Br', options);
+         if (selectLang.value == 'en') {
+          currentDate = date.toLocaleDateString('en-Br', options);
+      } else if (selectLang.value == 'ru') {
+          currentDate = date.toLocaleDateString('ru-Ru', options);
+      };
          document.getElementById("clock").innerHTML = currentTime;
          document.getElementById("currentdate").innerHTML = currentDate;
 
@@ -26,27 +32,49 @@ showTime();
     // console.log(hours);
 
     if (hours >= 6 && hours < 12) {
-      greet = "morning";
+     // greet = "morning";
+      if (selectLang.value == 'en') {
+        greet = 'morning';
+      } else if (selectLang.value == 'ru'){
+        greet = 'Доброе утро,';
+        };
     } else if (hours >= 12 && hours < 18) {
-      greet = "afternoon";
+     // greet = "afternoon";
+     if (selectLang.value == 'en') {
+       greet = 'afternoon';
+      } else if (selectLang.value == 'ru'){
+        greet = 'Добрый день,';
+         };
     } else if (hours >= 18 && hours < 24) {
-      greet = "evening";
+     // greet = "evening";
+     if (selectLang.value == 'en') {
+       greet = 'evening';
+      } else if (selectLang.value == 'ru'){
+        greet = 'Добрый вечер,';
+        };
     } else {
-      greet = "night";
+     // greet = "night";
+     if (selectLang.value == 'en'){
+       greet = 'night';
+     } else if (selectLang.value == 'ru'){
+       greet = 'Доброй ночи,';
+        };
     }
     
-   // console.log(greet);
+    console.log(greet);
   }
-  window.setInterval(getTimeOfDay, 1000);
+ // window.setInterval(getTimeOfDay, 10000);
   getTimeOfDay();
 
 
 function showGreeting(){
  let greeting = document.querySelector('.greeting');
-    greeting.textContent = `Good ${greet},`;
-  
+   // greeting.textContent = `Good ${greet},`;
+    selectLang.value == 'en' ? greeting.textContent = `Good ${greet},` : greeting.textContent = `${greet}`;
+//console.log(greeting.textContent)
 }
 showGreeting();
+
 
 
 const yourname = document.querySelector('.name');
@@ -111,7 +139,7 @@ function getSlidePrev(){
     rand = 20;
     setBg(rand);
   }        
-  //  console.log(rand);
+ // console.log(rand);
 }
 prev.addEventListener('click', getSlidePrev);
 
@@ -128,14 +156,12 @@ async function getQuotes(){
   //let language = document.querySelector('lang')
  // console.log(language);
 
- // if (language == 'en'){
+  if (selectLang.value == 'en'){
     quotes = 'js/data/quotes-en.json';
-//  }
-/*
-  if (language == 'ru'){
+  } else if (selectLang.value == 'ru'){
     quotes = 'js/data/quotes-ru.json';
   }
-*/
+  //console.log(quotes);
   const res = await fetch(quotes);
   const data = await res.json();
  // console.log(data);
@@ -169,10 +195,15 @@ const wind = document.querySelector('.wind');
 const humidity = document.querySelector('.humidity');
 const yourcity = document.querySelector('.city');
 
+if (selectLang.value == 'ru'){
+  yourcity.value = `Минск`;
+}
+
 async function getWeather() {  
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${yourcity.value}&lang=en&appid=f8bcf48e68c4e870c8738d6525319d52&units=metric`;
   const res = await fetch(url);
   const data = await res.json();
+  if (selectLang.value == 'en'){
   if (data.cod == "404"){
     yourcity.value = "";
     yourcity.placeholder = "ERROR";
@@ -191,7 +222,26 @@ async function getWeather() {
   wind.textContent = `Wind speed: ${Math.round(data.wind.speed)} m/s`;
   humidity.textContent = `Humidity: ${Math.round(data.main.humidity)} %`;
   }
-
+} else if (selectLang.value == 'ru'){
+  if (data.cod == "404"){
+    yourcity.value = "";
+    yourcity.placeholder = "ОШИБКА";
+    temperature.textContent = `Город не найден`;
+    weatherIcon.classList.add(`owf-950`);
+    weatherDescription.textContent = 'Введите город';
+    wind.textContent = "";
+    humidity.textContent = "";
+    
+  } else {
+  //console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
+  weatherIcon.className = 'weather-icon owf';
+  weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+  temperature.textContent = `${Math.round(data.main.temp)}°C`;
+  weatherDescription.textContent = data.weather[0].description;
+  wind.textContent = `Скорость ветра: ${Math.round(data.wind.speed)} м/с`;
+  humidity.textContent = `Влажность: ${Math.round(data.main.humidity)} %`;
+  }
+}
 }
 getWeather();
 
@@ -407,3 +457,52 @@ settingsBtn.addEventListener("click", showSettings);
 
 
 */
+setInterval(() => {
+    getSlideNext();
+}, 600000)
+
+
+
+/* Select language */
+
+
+const allLang = ['en', 'ru'];
+
+selectLang.addEventListener('change', changeUrl);
+
+// проверим есть ли язык в localstorage
+function checkLangStorage() {
+    if (localStorage.getItem('lang')) {
+        selectLang.value = localStorage.getItem('lang');
+    }
+
+}
+checkLangStorage();
+
+function changeUrl() {
+    let lang = selectLang.value;
+    location.href = window.location.pathname + '#' + lang;
+    location.reload();
+}
+
+function changeLanguage() {
+    let hash = window.location.hash;
+    hash = hash.substr(1);
+    // console.log(hash);
+    if (!allLang.includes(hash)) {
+        location.href = window.location.pathname + '#en';
+        location.reload();
+    }
+    selectLang.value = hash;
+    localStorage.setItem('lang', hash);
+
+    for (let key in langArr) {
+        let elem = document.querySelector('.lng-' + key);
+        if (elem) {
+            elem.innerHTML = langArr[key][hash];
+        }
+    }
+    let inputName = document.querySelector('.name');
+    hash == 'en' ? inputName.setAttribute('placeholder', 'Enter name') : inputName.setAttribute('placeholder', 'Введите имя');
+}
+changeLanguage();
