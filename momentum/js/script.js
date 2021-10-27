@@ -1,11 +1,31 @@
+/* Часы и календарь */
+
+function showTime(){
+  window.setInterval(
+   function showTime(){
+       const date = new Date();
+       const currentTime = date.toLocaleTimeString();
+       const options = {weekday: 'long', month: 'long', day: 'numeric'};
+       let currentDate = date.toLocaleDateString('en-Br', options);
+       if (selectLang.value == 'en') {
+        currentDate = date.toLocaleDateString('en-Br', options);
+    } else if (selectLang.value == 'ru') {
+        currentDate = date.toLocaleDateString('ru-Ru', options);
+    };
+       document.getElementById("clock").innerHTML = currentTime;
+       document.getElementById("currentdate").innerHTML = currentDate;
+
+  }
+ , 1000);
+}  
+showTime();
+
+
 /* Select language */
 
 const selectLang = document.querySelector('.change-lang');
 const allLang = ['en', 'ru'];
 
-
-
-// проверим есть ли язык в localstorage
 function checkLangStorage() {
     if (localStorage.getItem('lang')) {
         selectLang.value = localStorage.getItem('lang');
@@ -45,28 +65,6 @@ changeLanguage();
 
 
 
-/* Часы и календарь */
-
- function showTime(){
-    window.setInterval(
-     function showTime(){
-         const date = new Date();
-         const currentTime = date.toLocaleTimeString();
-         const options = {weekday: 'long', month: 'long', day: 'numeric'};
-         let currentDate = date.toLocaleDateString('en-Br', options);
-         if (selectLang.value == 'en') {
-          currentDate = date.toLocaleDateString('en-Br', options);
-      } else if (selectLang.value == 'ru') {
-          currentDate = date.toLocaleDateString('ru-Ru', options);
-      };
-         document.getElementById("clock").innerHTML = currentTime;
-         document.getElementById("currentdate").innerHTML = currentDate;
-
-    }
-   , 1000);
- }  
-showTime();
-
 /* Greeting */
 
   let greet;
@@ -104,43 +102,7 @@ showTime();
      } 
      console.log(greet);
     }
-    
-/*
-    if (hours >= 6 && hours < 12) {
-     // greet = "morning";
-      if (selectLang.value == 'en') {
-        greet = 'morning';
-      } else if (selectLang.value == 'ru'){
-        greet = 'Доброе утро,';
-        };
-    } else if (hours >= 12 && hours < 18) {
-     // greet = "afternoon";
-     if (selectLang.value == 'en') {
-       greet = 'afternoon';
-      } else if (selectLang.value == 'ru'){
-        greet = 'Добрый день,';
-         };
-    } else if (hours >= 18 && hours < 24) {
-     // greet = "evening";
-     if (selectLang.value == 'en') {
-       greet = 'evening';
-      } else if (selectLang.value == 'ru'){
-        greet = 'Добрый вечер,';
-        };
-    } else {
-     // greet = "night";
-     if (selectLang.value == 'en'){
-       greet = 'night';
-     } else if (selectLang.value == 'ru'){
-       greet = 'Доброй ночи,';
-        };
-    }
    
-   // console.log(greet);
-    
-  }
- */ 
-  
 let greeting = document.querySelector('.greeting');
 function showGreeting(){
       
@@ -172,8 +134,6 @@ window.addEventListener('load', getLocalStorage);
 
 
 
-
-
 /* Change backgrounds*/
 
 
@@ -185,10 +145,8 @@ function getRandom() {
 }
 getRandom();
 
-function setBg(){
-  
+function setBg(){  
    rand = rand.toString().padStart(2, "0");    
-
    document.body.style.backgroundImage = `url("https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${greet}/${rand}.jpg")`;
 
   }
@@ -258,12 +216,10 @@ async function getQuotes(){
   
 }
 
-
 document.addEventListener('DOMContentLoaded', getQuotes);
 //console.log(language);
 
 quoteBtn.addEventListener('click', getQuotes);
-
 
 
 
@@ -276,16 +232,6 @@ const wind = document.querySelector('.wind');
 const humidity = document.querySelector('.humidity');
 const yourcity = document.querySelector('.city');
 yourcity.value = "Minsk";
-/*
-function changeCity(){
-if (selectLang.value == 'ru'){
-  yourcity.value = `Минск`;
-} else if (selectLang.value == 'en') {
-  yourcity.value = `Minsk`;
-};
-}
-changeCity();
-*/
 
 async function getWeather() {  
   let url = `https://api.openweathermap.org/data/2.5/weather?q=${yourcity.value}&lang=${selectLang.value}&appid=f8bcf48e68c4e870c8738d6525319d52&units=metric`;
@@ -421,16 +367,6 @@ const state = {
   photoSource: 'github',
   blocks: ['time', 'date','greeting', 'quote', 'weather', 'audio', 'todolist']
 }
-/*
-console.log('Score: 75 / 150 
-  (Часы и календарь +15
-   Приветствие +10
-   Смена фонового изображения +20
-   Виджет погоды +15
-   Виджет цитата дня +10
-   Аудиоплеер +5)')
-
-   */
 
   
 audio.addEventListener("ended", playNext),
@@ -459,138 +395,8 @@ function playPrev() {
     playAudio()
 }
 
-/*
 
-
-let urlApiFlickr, urlApiUnsplash;
-//checkLanguage(),
-engBtn.addEventListener("click", changeLanguageEng),
-rusBtn.addEventListener("click", changeLanguageRus);
-let apiFlickrBtn = document.querySelector(".flickr-api")
-  , apiUnsplashBtn = document.querySelector(".unsplash-api")
-  , githubBtn = document.querySelector(".github-api");
-async function getUnsplashToImage() {
-    const e = `https://api.unsplash.com/photos/random?orientation=landscape&query=${getTimeOfDayForBg()},nature&client_id=4zlg7vxd_ulCb_aTpZiwXv16GCqGfAOXokIEwa_JBhM`
-      , t = await fetch(e)
-      , o = await t.json();
-    urlApiUnsplash = o.urls.regular
-}
-getUnsplashToImage();
-const albomsFlickr = {
-    night: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720062587146&extras=url_h&format=json&nojsoncallback=1",
-    morning: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720069530982&extras=url_h&format=json&nojsoncallback=1",
-    afternoon: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720111881805&extras=url_h&format=json&nojsoncallback=1",
-    evening: "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720111880160&extras=url_h&format=json&nojsoncallback=1"
-}
-async function getFlickrToImage() {
-    const e = albomsFlickr[getTimeOfDayForBg()]
-      , t = await fetch(e)
-      , o = await t.json();
-    urlApiFlickr = o.photos.photo[randomNumForApi].url_h ? o.photos.photo[randomNumForApi].url_h : `https://farm${o.photos.photo[randomNumForApi].farm}.staticflickr.com/${o.photos.photo[randomNumForApi].server}/${o.photos.photo[randomNumForApi].id}_${o.photos.photo[randomNumForApi].secret}.jpg`
-}
-function setBgApi() {
-    const e = document.querySelector("body"),
-     t = new Image;
-    isApiFlickr ? (getFlickrToImage(),
-    t.src = urlApiFlickr) : isApiUnsplash ? (getUnsplashToImage(),
-    t.src = urlApiUnsplash) : setBg(),
-    t.onload = ()=>{
-        e.style.backgroundImage = `url('${t.src}')`,
-        setTimeout(()=>{
-            loading = !0
-        }
-        , 1100)
-    }
-}
-getFlickrToImage(),
-apiFlickrBtn.addEventListener("click", (function() {
-    githubBtn.classList.remove("active"),
-    apiUnsplashBtn.classList.remove("active"),
-    apiFlickrBtn.classList.add("active"),
-    isApiFlickr = !0,
-    isApiUnsplash = !1,
-    setBgApi()
-}
-//)),
-apiUnsplashBtn.addEventListener("click", (function() {
-    githubBtn.classList.remove("active"),
-    apiUnsplashBtn.classList.add("active"),
-    apiFlickrBtn.classList.remove("active"),
-    isApiFlickr = !1,
-    isApiUnsplash = !0,
-    setBgApi()
-}
-//)),
-githubBtn.addEventListener("click", (function() {
-    (isApiFlickr || isApiUnsplash) && (console.log(1),
-    githubBtn.classList.add("active"),
-    apiUnsplashBtn.classList.remove("active"),
-    apiFlickrBtn.classList.remove("active"),
-    isApiFlickr = !1,
-    isApiUnsplash = !1,
-    setBg())
-}
-//));
-const settingsBtn = document.querySelector(".settings-icon")
-  , settingsWrap = document.querySelector(".settings-wrap");
-function showSettings() {
-    settingsBtn.classList.toggle("active"),
-    settingsWrap.classList.toggle("active")
-}
-settingsBtn.addEventListener("click", showSettings);
-
-
-*/
 setInterval(() => {
     getSlideNext();
 }, 600000)
 
-
-
-/* Select language */
-
-/*
-const allLang = ['en', 'ru'];
-
-selectLang.addEventListener('change', changeUrl);
-selectLang.addEventListener('change', getTimeOfDay);
-selectLang.addEventListener('change', showGreeting);
-
-// проверим есть ли язык в localstorage
-function checkLangStorage() {
-    if (localStorage.getItem('lang')) {
-        selectLang.value = localStorage.getItem('lang');
-    }
-
-}
-checkLangStorage();
-
-function changeUrl() {
-    let lang = selectLang.value;
-    location.href = window.location.pathname + '#' + lang;
-    location.reload();
-}
-
-function changeLanguage() {
-    let hash = window.location.hash;
-    hash = hash.substr(1);
-    // console.log(hash);
-    if (!allLang.includes(hash)) {
-        location.href = window.location.pathname + '#en';
-        location.reload();
-    }
-    selectLang.value = hash;
-    localStorage.setItem('lang', hash);
-
-    for (let key in langArr) {
-        let elem = document.querySelector('.lng-' + key);
-        if (elem) {
-            elem.innerHTML = langArr[key][hash];
-        }
-    }
-    let inputName = document.querySelector('.name');
-    hash == 'en' ? inputName.setAttribute('placeholder', 'Enter name') : inputName.setAttribute('placeholder', 'Введите имя');
-    
-}
-changeLanguage();
-*/
