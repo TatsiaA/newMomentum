@@ -1,4 +1,49 @@
+/* Select language */
+
 const selectLang = document.querySelector('.change-lang');
+const allLang = ['en', 'ru'];
+
+
+
+// проверим есть ли язык в localstorage
+function checkLangStorage() {
+    if (localStorage.getItem('lang')) {
+        selectLang.value = localStorage.getItem('lang');
+    }
+
+}
+checkLangStorage();
+
+function changeUrl() {
+    let lang = selectLang.value;
+    location.href = window.location.pathname + '#' + lang;
+    location.reload();
+}
+
+function changeLanguage() {
+    let hash = window.location.hash;
+    hash = hash.substr(1);
+    // console.log(hash);
+    if (!allLang.includes(hash)) {
+        location.href = window.location.pathname + '#en';
+        location.reload();
+    }
+    selectLang.value = hash;
+    localStorage.setItem('lang', hash);
+
+    for (let key in langArr) {
+        let elem = document.querySelector('.lng-' + key);
+        if (elem) {
+            elem.innerHTML = langArr[key][hash];
+        }
+    }
+    let inputName = document.querySelector('.name');
+    hash == 'en' ? inputName.setAttribute('placeholder', 'Enter name') : inputName.setAttribute('placeholder', 'Введите имя');
+    
+}
+changeLanguage();
+
+
 
 /* Часы и календарь */
 
@@ -25,12 +70,42 @@ showTime();
 /* Greeting */
 
   let greet;
+  let greet1;
   function getTimeOfDay(){
     const date1 = new Date();
     const hours = date1.getHours();
+    if (hours >= 6 && hours < 12) {
+      greet = 'morning';
+    } else if (hours >= 12 && hours < 18) {
+    greet = 'afternoon';
+    } else if (hours >= 18 && hours < 24) {
+      greet = 'evening';
+    } else if (hours >= 0 && hours < 6) {
+      greet = 'night';
+    };
     
     // console.log(hours);
-
+    if (selectLang.value == 'en' && hours >= 6 && hours < 12) {
+        greet1 = 'morning';
+      } else if (selectLang.value == 'en' && hours >= 12 && hours < 18) {
+      greet1 = 'afternoon';
+      } else if (selectLang.value == 'en' && hours >= 18 && hours < 24) {
+        greet1 = 'evening';
+      } else if (selectLang.value == 'en' && hours >= 0 && hours < 6) {
+        greet1 = 'night';
+      } else if (selectLang.value == 'ru' && hours >= 6 && hours < 12) {
+        greet1 = 'Доброе утро,';
+      } else if (selectLang.value == 'ru' && hours >= 12 && hours < 18) {
+      greet1 = 'Добрый день,';
+      } else if (selectLang.value == 'ru' && hours >= 18 && hours < 24) {
+        greet1 = 'Добрый вечер,';
+      } else if (selectLang.value == 'ru' && hours >= 0 && hours < 6) {
+        greet1 = 'Доброй ночи,';
+     } 
+     console.log(greet);
+    }
+    
+/*
     if (hours >= 6 && hours < 12) {
      // greet = "morning";
       if (selectLang.value == 'en') {
@@ -60,21 +135,26 @@ showTime();
        greet = 'Доброй ночи,';
         };
     }
+   
+   // console.log(greet);
     
-    console.log(greet);
   }
- // window.setInterval(getTimeOfDay, 10000);
-  getTimeOfDay();
-
-
+ */ 
+  
+let greeting = document.querySelector('.greeting');
 function showGreeting(){
- let greeting = document.querySelector('.greeting');
-   // greeting.textContent = `Good ${greet},`;
-    selectLang.value == 'en' ? greeting.textContent = `Good ${greet},` : greeting.textContent = `${greet}`;
-//console.log(greeting.textContent)
-}
-showGreeting();
+      
+      getTimeOfDay();  
+     // greeting.textContent = `${greet},`;
+        selectLang.value == 'en' ? greeting.textContent = `Good ${greet1},` : greeting.textContent = `${greet1}`;
+     console.log(greeting.textContent)
+     }
+     showGreeting();
 
+
+     selectLang.addEventListener('change', changeUrl);
+     selectLang.addEventListener('change', getTimeOfDay);
+     selectLang.addEventListener('change', showGreeting);
 
 
 const yourname = document.querySelector('.name');
@@ -90,11 +170,11 @@ function getLocalStorage() {
 }
 window.addEventListener('load', getLocalStorage);
 
+
+
+
+
 /* Change backgrounds*/
-
-
-
-
 
 
 let rand = Math.ceil(Math.random() * 20);
@@ -108,6 +188,7 @@ getRandom();
 function setBg(){
   
    rand = rand.toString().padStart(2, "0");    
+
    document.body.style.backgroundImage = `url("https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${greet}/${rand}.jpg")`;
 
   }
@@ -194,13 +275,20 @@ const weatherDescription = document.querySelector('.weather-description');
 const wind = document.querySelector('.wind');
 const humidity = document.querySelector('.humidity');
 const yourcity = document.querySelector('.city');
-
+yourcity.value = "Minsk";
+/*
+function changeCity(){
 if (selectLang.value == 'ru'){
   yourcity.value = `Минск`;
+} else if (selectLang.value == 'en') {
+  yourcity.value = `Minsk`;
+};
 }
+changeCity();
+*/
 
 async function getWeather() {  
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${yourcity.value}&lang=en&appid=f8bcf48e68c4e870c8738d6525319d52&units=metric`;
+  let url = `https://api.openweathermap.org/data/2.5/weather?q=${yourcity.value}&lang=${selectLang.value}&appid=f8bcf48e68c4e870c8738d6525319d52&units=metric`;
   const res = await fetch(url);
   const data = await res.json();
   if (selectLang.value == 'en'){
@@ -215,6 +303,7 @@ async function getWeather() {
     
   } else {
   //console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
+  yourcity.value = data.name;
   weatherIcon.className = 'weather-icon owf';
   weatherIcon.classList.add(`owf-${data.weather[0].id}`);
   temperature.textContent = `${Math.round(data.main.temp)}°C`;
@@ -230,10 +319,10 @@ async function getWeather() {
     weatherIcon.classList.add(`owf-950`);
     weatherDescription.textContent = 'Введите город';
     wind.textContent = "";
-    humidity.textContent = "";
-    
-  } else {
-  //console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
+    humidity.textContent = "";    
+  } else {  
+  yourcity.value = data.name;
+ // console.log(yourcity.value);
   weatherIcon.className = 'weather-icon owf';
   weatherIcon.classList.add(`owf-${data.weather[0].id}`);
   temperature.textContent = `${Math.round(data.main.temp)}°C`;
@@ -246,13 +335,8 @@ async function getWeather() {
 getWeather();
 
 function setLocalStorageForCity() {
-/*  if (data.cod == "404"){
-    yourcity.value = "Minsk";
-    localStorage.setItem('city', yourcity.value);
-    console.log(yourcity.value);
-  } else */
   localStorage.setItem('city', yourcity.value);
-  console.log(yourcity.value);
+ // console.log(yourcity.value);
 }
 window.addEventListener('beforeunload', setLocalStorageForCity);
 
@@ -465,10 +549,12 @@ setInterval(() => {
 
 /* Select language */
 
-
+/*
 const allLang = ['en', 'ru'];
 
 selectLang.addEventListener('change', changeUrl);
+selectLang.addEventListener('change', getTimeOfDay);
+selectLang.addEventListener('change', showGreeting);
 
 // проверим есть ли язык в localstorage
 function checkLangStorage() {
@@ -504,5 +590,7 @@ function changeLanguage() {
     }
     let inputName = document.querySelector('.name');
     hash == 'en' ? inputName.setAttribute('placeholder', 'Enter name') : inputName.setAttribute('placeholder', 'Введите имя');
+    
 }
 changeLanguage();
+*/
