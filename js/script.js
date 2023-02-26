@@ -17,7 +17,7 @@ function showTime(){
 
   }
  , 1000);
-}  
+}
 showTime();
 
 
@@ -59,7 +59,7 @@ function changeLanguage() {
     }
     let inputName = document.querySelector('.name');
     hash == 'en' ? inputName.setAttribute('placeholder', 'Enter name') : inputName.setAttribute('placeholder', 'Введите имя');
-    
+
 }
 changeLanguage();
 
@@ -81,7 +81,7 @@ changeLanguage();
     } else if (hours >= 0 && hours < 6) {
       greet = 'night';
     };
-    
+
     // console.log(hours);
     if (selectLang.value == 'en' && hours >= 6 && hours < 12) {
         greet1 = 'morning';
@@ -99,14 +99,14 @@ changeLanguage();
         greet1 = 'Добрый вечер,';
       } else if (selectLang.value == 'ru' && hours >= 0 && hours < 6) {
         greet1 = 'Доброй ночи,';
-     } 
+     }
      console.log(greet);
     }
-   
+
 let greeting = document.querySelector('.greeting');
 function showGreeting(){
-      
-      getTimeOfDay();  
+
+      getTimeOfDay();
      // greeting.textContent = `${greet},`;
         selectLang.value == 'en' ? greeting.textContent = `Good ${greet1},` : greeting.textContent = `${greet1}`;
      console.log(greeting.textContent)
@@ -140,44 +140,44 @@ window.addEventListener('load', getLocalStorage);
 let rand = Math.ceil(Math.random() * 20);
 
 function getRandom() {
-  
- // console.log(rand); 
+
+ // console.log(rand);
 }
 getRandom();
 
-function setBg(){  
-   rand = rand.toString().padStart(2, "0");    
+function setBg(){
+   rand = rand.toString().padStart(2, "0");
    document.body.style.backgroundImage = `url("https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${greet}/${rand}.jpg")`;
 
   }
   setBg();
-                                               
+
 
 const prev = document.querySelector('.slide-prev'),
       next = document.querySelector('.slide-next');
 
 function getSlideNext(){
-  if (rand < 20) { 
+  if (rand < 20) {
     setBg(rand);
-    rand++;   
-    
+    rand++;
+
   } else {
     rand = 1;
     setBg(rand);
-  }         
-  
+  }
+
  // console.log(rand);
 }
 next.addEventListener('click', getSlideNext);
 
 function getSlidePrev(){
-  if (rand > 1) {     
-    rand--;   
+  if (rand > 1) {
+    rand--;
     setBg(rand);
   } else {
     rand = 20;
     setBg(rand);
-  }        
+  }
  // console.log(rand);
 }
 prev.addEventListener('click', getSlidePrev);
@@ -208,12 +208,12 @@ async function getQuotes(){
  let randomQuote = Math.floor(Math.random() * data.length);
  // console.log(randomQuote);
  // console.log(data.length);
-  
+
   text.textContent = `${data[randomQuote].text}`;
   author.textContent = `${data[randomQuote].author}`;
  // console.log(text.textContent);
  // console.log(author.textContent);
-  
+
 }
 
 document.addEventListener('DOMContentLoaded', getQuotes);
@@ -233,7 +233,7 @@ const humidity = document.querySelector('.humidity');
 const yourcity = document.querySelector('.city');
 yourcity.value = "Minsk";
 
-async function getWeather() {  
+async function getWeather() {
   let url = `https://api.openweathermap.org/data/2.5/weather?q=${yourcity.value}&lang=${selectLang.value}&appid=f8bcf48e68c4e870c8738d6525319d52&units=metric`;
   const res = await fetch(url);
   const data = await res.json();
@@ -246,7 +246,7 @@ async function getWeather() {
     weatherDescription.textContent = 'Try to enter correct city';
     wind.textContent = "";
     humidity.textContent = "";
-    
+
   } else {
   //console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
   yourcity.value = data.name;
@@ -265,8 +265,8 @@ async function getWeather() {
     weatherIcon.classList.add(`owf-950`);
     weatherDescription.textContent = 'Введите город';
     wind.textContent = "";
-    humidity.textContent = "";    
-  } else {  
+    humidity.textContent = "";
+  } else {
   yourcity.value = data.name;
  // console.log(yourcity.value);
   weatherIcon.className = 'weather-icon owf';
@@ -317,18 +317,18 @@ function playAudio() {
   audio.currentTime = 0;
   audio.play();
   isPlay = true;
- 
+
  //console.log(playNum);
 }
 function pauseAudio() {
   audio.pause();
   isPlay = false;
- 
+
 }
 
 function toggleBtn() {
- playBtn.classList.toggle('pause'); 
- 
+ playBtn.classList.toggle('pause');
+
 }
 playBtn.addEventListener('click', toggleBtn);
 
@@ -336,7 +336,7 @@ function togglePlay() {
   if (isPlay == true){
     playAudio(playNum);
   //playBtn.style.backgroundImage = `../assets/svg/pause.svg`;
-  
+
 } else {
   pauseAudio(playNum);
  // playBtn.style.backgroundImage = `../assets/svg/play.svg`;
@@ -368,7 +368,7 @@ const state = {
   blocks: ['time', 'date','greeting', 'quote', 'weather', 'audio', 'todolist']
 }
 
-  
+
 audio.addEventListener("ended", playNext),
 document.querySelector(".play-next").addEventListener("click", playNext),
 document.querySelector(".play-prev").addEventListener("click", playPrev),
@@ -399,4 +399,3 @@ function playPrev() {
 setInterval(() => {
     getSlideNext();
 }, 600000)
-
